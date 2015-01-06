@@ -1,0 +1,31 @@
+from sklearn import datasets
+iris = datasets.load_iris()
+from sklearn.naive_bayes import GaussianNB
+
+gnb = GaussianNB()
+
+Iris = pd.read_csv('R:\\Data\\cs\\Advanced Metering\\CHM\\PsuedoDataForCode\\Iris.csv')
+
+X = Iris[Iris.columns[0:4]]
+
+Y, _ = pd.factorize(Iris['Species'])
+ClassNames = pd.factorize(Iris['Species'])
+
+
+y_pred = gnb.fit(X, Y).predict(X)
+rows_list = [] 
+for x in range(0, 150):
+    #print(y_pred[x])
+    rows_list.append(y_pred[x])
+    
+df = pd.DataFrame(rows_list) 
+df =df.reset_index()
+df.columns = ['index', 'PredictedValue']
+
+Iris =Iris.reset_index()
+
+merged = Iris.merge(df,on='index') 
+merged['Correct'] = merged['Species'] == merged['PredictedValue']
+print(pd.crosstab(merged.Species,merged.Correct))
+
+print(pd.crosstab(merged.Species, merged.PredictedValue).apply(lambda r: r/r.sum(), axis=1))
