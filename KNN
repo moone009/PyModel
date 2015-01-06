@@ -1,0 +1,36 @@
+from sklearn import neighbors
+import pandas as pd
+pd.set_option('display.height', 1000)
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+
+
+Iris = pd.read_csv('R:\\Data\\cs\\Advanced Metering\\CHM\\PsuedoDataForCode\\Iris.csv')
+
+X = Iris[Iris.columns[0:4]]
+
+Y, _ = pd.factorize(Iris['Species'])
+ClassNames = pd.factorize(Iris['Species'])
+
+
+knn = neighbors.KNeighborsClassifier()
+knn.fit(X, Y)
+
+rows_list = [] 
+for x in range(0, 150):
+    print(knn.predict(iris.data[x]))
+    rows_list.append(knn.predict(iris.data[x]))
+    
+df = pd.DataFrame(rows_list) 
+df =df.reset_index()
+df.columns = ['index', 'PredictedValue']
+
+Iris =Iris.reset_index()
+
+merged = Iris.merge(df,on='index') 
+
+
+pd.crosstab(merged.Species, merged.PredictedValue).apply(lambda r: r/r.sum(), axis=1)
+
+
